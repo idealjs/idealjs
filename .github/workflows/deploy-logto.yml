@@ -1,0 +1,42 @@
+name: CI
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    name: "Deploy"
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/tmp.key
+          chmod 600 ~/.ssh/tmp.key
+          cat >>~/.ssh/config <<END
+          Host idealjs.com
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/tmp.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.IDEALJS_ALI_SSH_USER }}
+          SSH_KEY: ${{ secrets.IDEALJS_ALI_SSH_KEY }}
+          SSH_HOST: ${{ secrets.IDEALJS_ALI_SSH_HOST }}
+
+      - name: Start Logto
+        run: |
+          echo "$IMAGE_VERSION" >> ~/.tmp.env
+          echo "$POSTGRES_PASSWORD" > ~/.tmp.env
+          ssh idealjs.com 'mkdir -p ~/workspace/logto'
+          scp ~/.tmp.env idealjs.com:~/workspace/logto/.env
+          scp packages/logto/docker-compose.yml idealjs.com:~/workspace/logto/docker-compose.yml
+          ssh idealjs.com 'docker compose -f ~/workspace/logto/docker-compose.yml up -d'
+        env:
+          IMAGE_VERSION: ${{ secrets.IDEALJS_LOGTO_IMAGE_VERSION }}
+          POSTGRES_PASSWORD: ${{ secrets.IDEALJS_LOGTO_POSTGRES_PASSWORD }}
+
+      - name: Clean
+        if: always()
+        run: |
+          rm -rf ~/.ssh
+          rm -f ~/.tmp.env
+
