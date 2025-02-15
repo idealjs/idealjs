@@ -1,9 +1,12 @@
-name: CI
+name: Deploy Logto
 on: workflow_dispatch
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     name: "Deploy"
+    environment:
+      name: logto-prod
     steps:
       - name: Configure SSH
         run: |
