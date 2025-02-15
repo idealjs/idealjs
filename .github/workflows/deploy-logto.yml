@@ -31,7 +31,7 @@ jobs:
           echo "$POSTGRES_PASSWORD" > ~/.tmp.env
           ssh idealjs.com 'mkdir -p ~/workspace/logto'
           scp ~/.tmp.env idealjs.com:~/workspace/logto/.env
-          scp packages/logto/docker-compose.yml idealjs.com:~/workspace/logto/docker-compose.yml
+          scp ./packages/logto/docker-compose.yml idealjs.com:~/workspace/logto/docker-compose.yml
           ssh idealjs.com 'docker compose -f ~/workspace/logto/docker-compose.yml up -d'
         env:
           IMAGE_VERSION: ${{ secrets.IDEALJS_LOGTO_IMAGE_VERSION }}
