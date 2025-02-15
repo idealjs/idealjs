@@ -29,8 +29,8 @@ jobs:
 
       - name: Start Logto
         run: |
-          echo "$IMAGE_VERSION" >> ~/.tmp.env
-          echo "$POSTGRES_PASSWORD" > ~/.tmp.env
+          echo "IMAGE_VERSION=$IMAGE_VERSION" >> ~/.tmp.env
+          echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> ~/.tmp.env
           ssh idealjs.com 'mkdir -p ~/workspace/logto'
           scp ~/.tmp.env idealjs.com:~/workspace/logto/.env
           scp ./packages/logto/docker-compose.yml idealjs.com:~/workspace/logto/docker-compose.yml
