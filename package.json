@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "examples/*",
+    "apps/*"
+  ],
+  "repository": "git@github.com:idealjs/mono-template.git",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint packages/**/*.{tsx,ts} examples/**/*.{tsx,ts} --fix"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
+    "@typescript-eslint/parser": "^8.24.0",
+    "eslint": "^9.20.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "lerna": "^8.1.9",
+    "lodash": "^4.17.21",
+    "prettier": "^3.5.0",
+    "typescript": "^5.7.3"
+  },
+  "packageManager": "yarn@4.0.2"
+}
