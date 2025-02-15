@@ -37,6 +37,5 @@ jobs:
       - name: Clean
         if: always()
         run: |
-          rm -rf ~/.ssh
-          rm -f ~/.tmp.env
-
+          rm ~/.ssh/tmp.key
+          rm ~/.tmp.env
