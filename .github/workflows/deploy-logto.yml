@@ -8,6 +8,8 @@ jobs:
     environment:
       name: logto-prod
     steps:
+      - uses: actions/checkout@v4
+
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
