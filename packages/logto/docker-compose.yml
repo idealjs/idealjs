@@ -1,5 +1,5 @@
 services:
-  app:
+  logto:
     container_name: idealjs_logto
     depends_on:
       postgres:
@@ -12,10 +12,10 @@ services:
     environment:
       - TRUST_PROXY_HEADER=1
       - DB_URL=postgres://postgres:${POSTGRES_PASSWORD-p0stgr3s}@postgres:5432/logto
-      # Mandatory for GitPod to map host env to the container, thus GitPod can dynamically configure the public URL of Logto;
-      # Or, you can leverage it for local testing.
-      - ENDPOINT
-      - ADMIN_ENDPOINT
+    labels:
+      - "traefik.http.routers.logto.rule=Host(`auth.idealjs.com`)"
+      - "traefik.http.services.logto.loadbalancer.server.port=3001"
+
   postgres:
     container_name: idealjs_logto_pg
     image: registry.cn-hangzhou.aliyuncs.com/idealjs/postgres:17-alpine3.21
