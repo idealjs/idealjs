@@ -1,5 +1,6 @@
 services:
-  reverse-proxy:
+  traefik:
+    container_name: idealjs_traefik
     image: registry.cn-hangzhou.aliyuncs.com/idealjs/traefik:v3.3.3
     command: --api.insecure=true --providers.docker
     ports:
