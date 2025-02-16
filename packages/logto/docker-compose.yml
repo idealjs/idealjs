@@ -3,7 +3,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    image: svhd/logto:${IMAGE_VERSION-latest}
+    image: registry.cn-hangzhou.aliyuncs.com/idealjs/logto:1.24.0
     entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
     ports:
       - 3001:3001
@@ -16,7 +16,7 @@ services:
       - ENDPOINT
       - ADMIN_ENDPOINT
   postgres:
-    image: postgres:17-alpine
+    image: registry.cn-hangzhou.aliyuncs.com/idealjs/postgres:17-alpine3.21
     user: postgres
     environment:
       POSTGRES_USER: postgres
