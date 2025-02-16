@@ -18,12 +18,11 @@ jobs:
           cat >>~/.ssh/config <<END
           Host idealjs.com
             HostName $SSH_HOST
-            User $SSH_USER
+            User idealjs
             IdentityFile ~/.ssh/tmp.key
             StrictHostKeyChecking no
           END
         env:
-          SSH_USER: ${{ secrets.IDEALJS_ALI_SSH_USER }}
           SSH_KEY: ${{ secrets.IDEALJS_ALI_SSH_KEY }}
           SSH_HOST: ${{ secrets.IDEALJS_ALI_SSH_HOST }}
 
