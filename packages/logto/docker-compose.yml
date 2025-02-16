@@ -1,5 +1,6 @@
 services:
   app:
+    container_name: idealjs_logto
     depends_on:
       postgres:
         condition: service_healthy
@@ -16,15 +17,19 @@ services:
       - ENDPOINT
       - ADMIN_ENDPOINT
   postgres:
+    container_name: idealjs_logto_pg
     image: registry.cn-hangzhou.aliyuncs.com/idealjs/postgres:17-alpine3.21
     user: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD-p0stgr3s}
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+volumes:
+  pg-data:
