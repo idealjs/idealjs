@@ -30,7 +30,7 @@ jobs:
         run: |
           ssh idealjs.com 'mkdir -p ~/workspace/traefik'
           scp ./packages/traefik/docker-compose.yml idealjs.com:~/workspace/traefik/docker-compose.yml
-          ssh idealjs.com 'docker network create default-network > /dev/null 2>&1'
+          ssh idealjs.com 'docker network create default-network >/dev/null 2>&1'
           ssh idealjs.com 'docker compose -f ~/workspace/traefik/docker-compose.yml up -d'
 
       - name: Clean
