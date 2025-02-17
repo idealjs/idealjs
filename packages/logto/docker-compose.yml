@@ -15,8 +15,13 @@ services:
       - TRUST_PROXY_HEADER=1
       - DB_URL=postgres://postgres:${POSTGRES_PASSWORD-p0stgr3s}@postgres:5432/logto
     labels:
-      - "traefik.http.routers.logto.rule=Host(`auth.idealjs.com`)"
-      - "traefik.http.services.logto.loadbalancer.server.port=3001"
+      - "traefik.http.routers.logto-auth.rule=Host(`logto-auth.idealjs.com`)"
+      - "traefik.http.routers.logto-auth.service=logto-auth"
+      - "traefik.http.services.logto-auth.loadbalancer.server.port=3001"
+      
+      - "traefik.http.routers.logto-admin.rule=Host(`logto-admin.idealjs.com`)"
+      - "traefik.http.routers.logto-admin.service=logto-admin"
+      - "traefik.http.services.logto-admin.loadbalancer.server.port=3002"
 
   postgres:
     container_name: idealjs_logto_pg
