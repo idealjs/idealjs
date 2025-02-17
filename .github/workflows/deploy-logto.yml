@@ -26,13 +26,17 @@ jobs:
           SSH_KEY: ${{ secrets.IDEALJS_ALI_SSH_KEY }}
           SSH_HOST: ${{ secrets.IDEALJS_ALI_SSH_HOST }}
 
+      - name: Create Network
+        continue-on-error: true
+        run: |
+          ssh idealjs.com 'docker network create default-network'
+
       - name: Start Logto
         run: |
           echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> ~/.tmp.env
           ssh idealjs.com 'mkdir -p ~/workspace/logto'
           scp ~/.tmp.env idealjs.com:~/workspace/logto/.env
           scp ./packages/logto/docker-compose.yml idealjs.com:~/workspace/logto/docker-compose.yml
-          ssh idealjs.com 'docker network create default-network 2>/dev/null'
           ssh idealjs.com 'docker compose -f ~/workspace/logto/docker-compose.yml up -d'
         env:
           POSTGRES_PASSWORD: ${{ secrets.IDEALJS_LOGTO_POSTGRES_PASSWORD }}
