@@ -8,11 +8,17 @@ services:
       - --api.insecure=true
       - --providers.docker
       - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.idealjs-resolver.acme.email=arnold.cui@idealjs.com
+      - --certificatesresolvers.idealjs-resolver.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.idealjs-resolver.acme.httpchallenge.entrypoint=web
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt:/letsencrypt
 
 networks:
   traefik-network:
