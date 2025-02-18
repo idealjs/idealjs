@@ -3,8 +3,11 @@ services:
     container_name: idealjs_traefik
     image: registry.cn-hangzhou.aliyuncs.com/idealjs/traefik:v3.3.3
     networks:
-      - default-network
-    command: --api.insecure=true --providers.docker
+      - traefik-network
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --entrypoints.web.address=:80
     ports:
       - "80:80"
       - "8080:8080"
@@ -12,5 +15,5 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
-  default-network:
+  traefik-network:
     external: true
