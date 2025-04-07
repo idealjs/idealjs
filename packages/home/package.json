@@ -23,6 +23,7 @@
     "eslint-config-next": "15.2.4",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vercel": "^41.4.1"
   }
 }
