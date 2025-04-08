@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { unstable_ViewTransition as ViewTransition, useState } from "react";
 
-import { layoutProxy, usePageName } from "./layout";
+import { layoutProxy, usePageName } from "../components/LayoutProvider";
 
 export default function Home() {
   const router = useRouter();
