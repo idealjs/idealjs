@@ -1,0 +1,21 @@
+services:
+  idealjs-home:
+    container_name: idealjs_home
+    image: registry.cn-hangzhou.aliyuncs.com/idealjs/home:${TAG:-latest}
+    networks:
+      - traefik-network
+    ports:
+      - 3000:3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.idealjs-home.rule=Host(`www.idealjs.com`)"
+      - "traefik.http.routers.idealjs-home.rule=Host(`idealjs.com`)"
+      - "traefik.http.routers.idealjs-home.entrypoints=websecure"
+      - "traefik.http.routers.idealjs-home.tls=true"
+      - "traefik.http.routers.idealjs-home.tls.certresolver=idealjs-resolver"
+      - "traefik.http.routers.idealjs-home.service=idealjs-home"
+      - "traefik.http.services.idealjs-home.loadbalancer.server.port=3000"
+
+networks:
+  traefik-network:
+    external: true
