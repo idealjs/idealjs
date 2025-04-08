@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+@keyframes move-out {
+  from {
+    transform: translateY(0%);
+  }
+
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes move-in {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+::view-transition-old(page) {
+  animation: 1s ease-in both move-out;
+}
+
+::view-transition-new(page) {
+  animation: 1s ease-in both move-in;
+}
