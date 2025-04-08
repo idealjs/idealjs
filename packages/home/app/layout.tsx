@@ -2,10 +2,7 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import {
-  PropsWithChildren,
-  unstable_ViewTransition as ViewTransition,
-} from "react";
+import { PropsWithChildren } from "react";
 
 import Navigation from "./components/Navigation";
 
@@ -32,13 +29,6 @@ const pages = [
 ];
 
 interface IProps {}
-
-const transitionStyles = {
-  entering: { opacity: 1 },
-  entered: { opacity: 1 },
-  exiting: { opacity: 0 },
-  exited: { opacity: 0 },
-};
 
 export default function RootLayout(props: PropsWithChildren<IProps>) {
   const { children } = props;

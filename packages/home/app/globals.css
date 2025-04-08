@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@keyframes move-out {
+@keyframes next-out {
   from {
     transform: translateY(0%);
   }
@@ -10,7 +10,7 @@
   }
 }
 
-@keyframes move-in {
+@keyframes next-in {
   from {
     transform: translateY(100%);
   }
@@ -20,10 +20,38 @@
   }
 }
 
+@keyframes prev-out {
+  from {
+    transform: translateY(0%);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes prev-in {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
 ::view-transition-old(page) {
-  animation: 1s ease-in both move-out;
+  animation: 1s ease-in both next-out;
 }
 
 ::view-transition-new(page) {
-  animation: 1s ease-in both move-in;
+  animation: 1s ease-in both next-in;
+}
+
+::view-transition-old(pageprev) {
+  animation: 1s ease-in both prev-out;
+}
+
+::view-transition-new(pageprev) {
+  animation: 1s ease-in both prev-in;
 }
