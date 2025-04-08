@@ -1,4 +1,4 @@
-name: Vercel Preview Deployment
+name: Home Preview Deployment
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -10,17 +10,20 @@ on:
       - qa
 
 jobs:
-  Deploy-Preview:
+  pre_deploy:
+    name: Deploy Vercel Preview & Build Push Image
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./packages/home
+    outputs:
+      TAG: ${{ steps.build_push.outputs.TAG }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'yarn'
+          cache: "yarn"
       - name: Pull Vercel Environment Information
         run: |
           yarn install --immutable
@@ -31,3 +34,66 @@ jobs:
       - name: Deploy Project Artifacts to Vercel
         run: |
           yarn vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} > deploy.log
+
+      - name: Login to Aliyun Container Registry
+        run: |
+          echo ${{ secrets.ALIYUN_DOCKER_PASSWORD }} | docker login ${{ secrets.ALIYUN_DOCKER_REGISTRY }} \
+            -u ${{ secrets.ALIYUN_DOCKER_USERNAME }} \
+            --password-stdin
+
+      - name: Build and Push Docker Image
+        id: build_push
+        run: |
+          TAG=preview-$(date +%Y%m%d%H%M%S)
+          docker build -t ${{ secrets.ALIYUN_DOCKER_REGISTRY }}/idealjs/home:$TAG .
+          docker push ${{ secrets.ALIYUN_DOCKER_REGISTRY }}/idealjs/home:$TAG
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Clean
+        if: always()
+        run: |
+          docker logout ${{ secrets.ALIYUN_DOCKER_REGISTRY }}
+
+  Server-Deploy:
+    needs: pre_deploy
+    env:
+      TAG: ${{ needs.pre_deploy.outputs.TAG }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/tmp.key
+          chmod 600 ~/.ssh/tmp.key
+          cat >>~/.ssh/config <<END
+          Host idealjs.com
+            HostName $SSH_HOST
+            User idealjs
+            IdentityFile ~/.ssh/tmp.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_KEY: ${{ secrets.IDEALJS_ALI_SSH_KEY }}
+          SSH_HOST: ${{ secrets.IDEALJS_ALI_SSH_HOST }}
+
+      - name: Create Network (if not exists)
+        continue-on-error: true
+        run: |
+          ssh idealjs.com "docker network create traefik-network"
+
+      - name: Deploy to Server
+        run: |
+          ssh idealjs.com "echo ${{ secrets.ALIYUN_DOCKER_PASSWORD }} | docker login ${{ secrets.ALIYUN_DOCKER_REGISTRY }} \
+            -u ${{ secrets.ALIYUN_DOCKER_USERNAME }} \
+            --password-stdin"
+          ssh idealjs.com "mkdir -p ~/workspace/home"
+          scp ./packages/home/docker-compose-qa.yml idealjs.com:~/workspace/home/docker-compose-qa.yml
+          ssh idealjs.com "echo $TAG > ~/workspace/home/test"
+          ssh idealjs.com "TAG=$TAG docker compose -f ~/workspace/home/docker-compose-qa.yml up -d"
+          ssh idealjs.com "docker logout ${{ secrets.ALIYUN_DOCKER_REGISTRY }}"
+
+      - name: Clean
+        if: always()
+        run: |
+          rm ~/.ssh/tmp.key
