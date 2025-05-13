@@ -18,6 +18,14 @@ services:
       - AUTH_SECRET=${INFISICAL_AUTH_SECRET-authsecret}
     networks:
       - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.idealjs-infisical.rule=Host(`infisical.idealjs.com`)"
+      - "traefik.http.routers.idealjs-infisical.entrypoints=websecure"
+      - "traefik.http.routers.idealjs-infisical.tls=true"
+      - "traefik.http.routers.idealjs-infisical.tls.certresolver=idealjs-resolver"
+      - "traefik.http.routers.idealjs-infisical.service=idealjs-infisical"
+      - "traefik.http.services.idealjs-infisical.loadbalancer.server.port=8080"
 
   redis:
     image: redis
