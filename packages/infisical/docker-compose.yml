@@ -9,7 +9,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-    env_file: .env
     ports:
       - 80:8080
     environment:
@@ -25,7 +24,6 @@ services:
     container_name: idealjs_infisical_redis
     networks:
       - traefik-network
-    env_file: .env
     restart: always
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
