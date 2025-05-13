@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   infisical:
     container_name: infisical_backend
@@ -26,20 +24,6 @@ services:
       - "traefik.http.routers.idealjs-infisical.tls.certresolver=idealjs-resolver"
       - "traefik.http.routers.idealjs-infisical.service=idealjs-infisical"
       - "traefik.http.services.idealjs-infisical.loadbalancer.server.port=8080"
-
-  redis:
-    image: redis
-    container_name: idealjs_infisical_redis
-    networks:
-      - traefik-network
-    restart: always
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    volumes:
-      - redis_data:/data
-
-volumes:
-  redis_data:
 
 networks:
   traefik-network:
