@@ -1,7 +1,7 @@
 services:
   infisical:
     container_name: idealjs_infisical
-    image: infisical/infisical:latest-postgres
+    image: registry.cn-hangzhou.aliyuncs.com/idealjs/infisical:v0.128.0-postgres
     depends_on:
       postgres:
         condition: service_healthy
