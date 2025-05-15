@@ -1,4 +1,4 @@
-name: Deploy Database
+name: Deploy Infisical
 on: workflow_dispatch
 
 jobs:
@@ -26,27 +26,19 @@ jobs:
           SSH_KEY: ${{ secrets.IDEALJS_ALI_SSH_KEY }}
           SSH_HOST: ${{ secrets.IDEALJS_ALI_SSH_HOST }}
 
-      - name: Create PG Volume
-        continue-on-error: true
-        run: |
-          ssh idealjs.com 'docker volume create database_pg_data'
-
-      - name: Create Redis Volume
-        continue-on-error: true
-        run: |
-          ssh idealjs.com 'docker volume create database_redis_data'
-
-      - name: Start Logto
+      - name: Start Infisical
         run: |
           echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> ~/.tmp.env
           echo "REDIS_PASSWORD=$REDIS_PASSWORD" >> ~/.tmp.env
-          ssh idealjs.com 'mkdir -p ~/workspace/logto'
-          scp ~/.tmp.env idealjs.com:~/workspace/logto/.env
-          scp ./packages/database/docker-compose.yml idealjs.com:~/workspace/database/docker-compose.yml
-          ssh idealjs.com 'docker compose -f ~/workspace/logto/docker-compose.yml up -d'
+          echo "INFISICAL_AUTH_SECRET=$INFISICAL_AUTH_SECRET" >> ~/.tmp.env
+          ssh idealjs.com 'mkdir -p ~/workspace/infisical'
+          scp ~/.tmp.env idealjs.com:~/workspace/infisical/.env
+          scp ./packages/infisical/docker-compose.yml idealjs.com:~/workspace/infisical/docker-compose.yml
+          ssh idealjs.com 'docker compose -f ~/workspace/infisical/docker-compose.yml up -d'
         env:
           POSTGRES_PASSWORD: ${{ secrets.IDEALJS_POSTGRES_PASSWORD }}
           REDIS_PASSWORD: ${{ secrets.IDEALJS_REDIS_PASSWORD }}
+          INFISICAL_AUTH_SECRET: ${{ secrets.IDEALJS_INFISICAL_AUTH_SECRET }}
 
       - name: Clean
         if: always()

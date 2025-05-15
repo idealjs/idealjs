@@ -1,5 +1,4 @@
 services:
-
   postgres:
     container_name: idealjs_pg
     image: registry.cn-hangzhou.aliyuncs.com/idealjs/postgres:17-alpine3.21
@@ -16,15 +15,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
- 
+
   redis:
-    image: redis
     container_name: idealjs_redis
+    image: redis
     networks:
       - traefik-network
-    restart: always
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+    command: >
+      --requirepass ${REDIS_PASSWORD-r3d1s}
     volumes:
       - database_redis_data:/data
 

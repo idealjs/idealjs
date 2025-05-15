@@ -28,16 +28,11 @@ jobs:
 
       - name: Start Logto
         run: |
-          echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> ~/.tmp.env
           ssh idealjs.com 'mkdir -p ~/workspace/logto'
-          scp ~/.tmp.env idealjs.com:~/workspace/logto/.env
           scp ./packages/logto/docker-compose.yml idealjs.com:~/workspace/logto/docker-compose.yml
           ssh idealjs.com 'docker compose -f ~/workspace/logto/docker-compose.yml up -d'
-        env:
-          POSTGRES_PASSWORD: ${{ secrets.IDEALJS_LOGTO_POSTGRES_PASSWORD }}
 
       - name: Clean
         if: always()
         run: |
           rm ~/.ssh/tmp.key
-          rm ~/.tmp.env
