@@ -31,6 +31,7 @@ jobs:
           echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> ~/.tmp.env
           echo "REDIS_PASSWORD=$REDIS_PASSWORD" >> ~/.tmp.env
           echo "INFISICAL_AUTH_SECRET=$INFISICAL_AUTH_SECRET" >> ~/.tmp.env
+          echo "INFISICAL_ENCRYPTION_KEY=$INFISICAL_ENCRYPTION_KEY" >> ~/.tmp.env
           ssh idealjs.com 'mkdir -p ~/workspace/infisical'
           scp ~/.tmp.env idealjs.com:~/workspace/infisical/.env
           scp ./packages/infisical/docker-compose.yml idealjs.com:~/workspace/infisical/docker-compose.yml
@@ -39,6 +40,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.IDEALJS_POSTGRES_PASSWORD }}
           REDIS_PASSWORD: ${{ secrets.IDEALJS_REDIS_PASSWORD }}
           INFISICAL_AUTH_SECRET: ${{ secrets.IDEALJS_INFISICAL_AUTH_SECRET }}
+          INFISICAL_ENCRYPTION_KEY: ${{ secrets.IDEALJS_INFISICAL_ENCRYPTION_KEY }}
 
       - name: Clean
         if: always()
