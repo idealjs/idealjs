@@ -1,9 +1,6 @@
 services:
   logto:
     container_name: idealjs_logto
-    depends_on:
-      postgres:
-        condition: service_healthy
     image: registry.cn-hangzhou.aliyuncs.com/idealjs/logto:1.24.0
     networks:
       - traefik-network
