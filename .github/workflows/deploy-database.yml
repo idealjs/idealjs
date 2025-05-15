@@ -36,14 +36,14 @@ jobs:
         run: |
           ssh idealjs.com 'docker volume create database_redis_data'
 
-      - name: Start Logto
+      - name: Start Database
         run: |
           echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> ~/.tmp.env
           echo "REDIS_PASSWORD=$REDIS_PASSWORD" >> ~/.tmp.env
-          ssh idealjs.com 'mkdir -p ~/workspace/logto'
-          scp ~/.tmp.env idealjs.com:~/workspace/logto/.env
+          ssh idealjs.com 'mkdir -p ~/workspace/database'
+          scp ~/.tmp.env idealjs.com:~/workspace/database/.env
           scp ./packages/database/docker-compose.yml idealjs.com:~/workspace/database/docker-compose.yml
-          ssh idealjs.com 'docker compose -f ~/workspace/logto/docker-compose.yml up -d'
+          ssh idealjs.com 'docker compose -f ~/workspace/database/docker-compose.yml up -d'
         env:
           POSTGRES_PASSWORD: ${{ secrets.IDEALJS_POSTGRES_PASSWORD }}
           REDIS_PASSWORD: ${{ secrets.IDEALJS_REDIS_PASSWORD }}
