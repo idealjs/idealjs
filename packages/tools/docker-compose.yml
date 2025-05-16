@@ -1,0 +1,18 @@
+services:
+  adminer:
+    image: adminer
+    networks:
+      - traefik-network
+    ports:
+      - 8081:8080
+
+  redisinsight:
+    image: registry.cn-hangzhou.aliyuncs.com/idealjs/redisinsight:2.68.0
+    networks:
+      - traefik-network
+    ports:
+      - 5540:5540
+
+networks:
+  traefik-network:
+    external: true
