@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD-p0stgr3s}
-      POSTGRES_MULTIPLE_DATABASES: infisical,logto
+      POSTGRES_MULTIPLE_DATABASES: logto
     volumes:
       - database_pg_data:/var/lib/postgresql/data
       - ./docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
