@@ -1,7 +1,7 @@
 services:
   logto:
     container_name: idealjs_logto
-    image: registry.cn-hangzhou.aliyuncs.com/idealjs/logto:1.24.0
+    image: registry.cn-hangzhou.aliyuncs.com/idealjs/logto:1.30.1
     networks:
       - traefik-network
     entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
